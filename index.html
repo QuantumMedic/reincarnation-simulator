@@ -39,18 +39,39 @@
         <button id="reincarnateButton" class="reincarnate-btn animate__animated animate__pulse animate__infinite">
           開始投胎
         </button>
-        <button id="historyButton" class="history-btn">
-          <span class="icon">��</span>歷史記錄
-        </button>
-      </div>
-
-      <div class="result-container">
-        <p id="result" class="result">準備好了！請點擊「開始投胎」按鈕</p>
       </div>
 
       <div class="info-container">
-        <div id="countryInfo" class="country-info"></div>
+        <div id="countryInfo" class="country-info">
+          <div class="country-header">
+            <img class="country-flag" src="" alt="">
+            <h2 class="country-name"></h2>
+          </div>
+          <div class="basic-stats">
+            <div class="stat-row">
+              <span class="stat-label">投胎機率：</span>
+              <span class="stat-value" id="birthProb"></span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">HDI指數：</span>
+              <span class="stat-value" id="hdiValue"></span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">HDI排名：</span>
+              <span class="stat-value" id="hdiRank"></span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">人均收入：</span>
+              <span class="stat-value" id="gniValue"></span>
+            </div>
+          </div>
+        </div>
         <div id="map" class="map-container"></div>
+      </div>
+
+      <div id="countryDetailInfo" class="country-detail-info">
+        <h3>詳細資訊</h3>
+        <div class="detailed-stats"></div>
       </div>
 
       <div class="indicators-section">
@@ -90,8 +111,10 @@
         <p class="data-source">資料來源：UN Human Development Report 2023-2024</p>
       </div>
 
-      <!-- 分享按鈕移到最下面 -->
-      <div class="share-section">
+      <div class="bottom-section">
+        <button id="historyButton" class="history-btn">
+          <span class="icon">📜</span>歷史記錄
+        </button>
         <div class="share-group">
           <button id="copyButton" class="share-btn">
             <span class="icon">📋</span>複製連結

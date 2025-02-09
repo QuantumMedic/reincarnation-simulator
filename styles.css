@@ -27,20 +27,21 @@ body {
 .app-header {
   background: linear-gradient(135deg, #16213e, #1a1a2e);
   color: white;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
   text-align: center;
   box-shadow: var(--shadow);
+  width: 100%;
 }
 
 .app-header h1 {
   margin: 0;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
 .subtitle {
   margin: 0.5rem 0 0;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   opacity: 0.9;
 }
 
@@ -60,8 +61,8 @@ body {
   background: linear-gradient(135deg, #e94560, #c81d4e);
   color: white;
   border: none;
-  padding: 1rem 3rem;
-  font-size: 1.25rem;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
   border-radius: 50px;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
@@ -776,11 +777,28 @@ body {
 
   /* 其他手機版調整保持不變 */
   .app-container {
-    padding: 10px;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .main-content {
+    padding: 1rem;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .app-header {
+    width: 100vw;
+    margin: 0;
+    padding: 0.5rem 0;
   }
 
   .app-header h1 {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
+    width: 100%;
+    text-align: center;
   }
 
   .control-panel {

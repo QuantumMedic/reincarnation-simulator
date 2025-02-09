@@ -117,9 +117,13 @@ class ReincarnationGame {
     
     // 更新基本統計數據
     document.getElementById('birthProb').textContent = `${populationPercent}%`;
-    document.getElementById('hdiValue').textContent = country.hdi ? country.hdi.toFixed(3) : '無資料';
+    const hdiElement = document.getElementById('hdiValue');
+    hdiElement.textContent = country.hdi ? country.hdi.toFixed(3) : '無資料';
+    hdiElement.className = `stat-value ${getColorClass(country.hdi, averages.hdi)}`;
     document.getElementById('hdiRank').textContent = country.hdiRank || '無資料';
-    document.getElementById('gniValue').textContent = country.gni ? `$${country.gni.toLocaleString()}` : '無資料';
+    const gniElement = document.getElementById('gniValue');
+    gniElement.textContent = country.gni ? `$${country.gni.toLocaleString()}` : '無資料';
+    gniElement.className = `stat-value ${getColorClass(country.gni, averages.gni)}`;
 
     // 更新詳細資訊
     const detailInfo = document.getElementById('countryDetailInfo');

@@ -27,20 +27,20 @@ body {
 .app-header {
   background: linear-gradient(135deg, #16213e, #1a1a2e);
   color: white;
-  padding: 2rem 0;
+  padding: 1rem 0;
   text-align: center;
   box-shadow: var(--shadow);
 }
 
 .app-header h1 {
   margin: 0;
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
 }
 
 .subtitle {
   margin: 0.5rem 0 0;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   opacity: 0.9;
 }
 
@@ -53,7 +53,7 @@ body {
 
 .control-panel {
   text-align: center;
-  margin-bottom: 2rem;
+  margin: 0.5rem 0;
 }
 
 .reincarnate-btn {
@@ -139,9 +139,27 @@ body {
 
 .country-info {
   background: var(--card-background);
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
+}
+
+.country-info .country-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.country-info .country-flag {
+  width: 50px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.country-info .country-name {
+  margin: 0;
+  font-size: 1.5rem;
 }
 
 .modal {
@@ -346,8 +364,8 @@ body {
 
 .stats-banner {
   background: rgba(255, 255, 255, 0.1);
-  margin-top: 1.5rem;
-  padding: 1rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
   border-radius: var(--border-radius);
   display: flex;
   justify-content: center;
@@ -356,18 +374,20 @@ body {
 
 .stat-counter {
   text-align: center;
+  min-height: auto;
 }
 
 .stat-counter span {
   display: block;
-  font-size: 2rem;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
 }
 
 .stat-counter label {
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   opacity: 0.9;
+  line-height: 1;
 }
 
 /* 添加國家列表按鈕 */
@@ -682,7 +702,7 @@ body {
   color: white;
   border: none;
   border-radius: 4px;
-  padding: 8px 12px;
+  padding: 4px 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -777,4 +797,62 @@ body {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
   }
+}
+
+/* 新增簡化版國家資訊樣式 */
+.country-info {
+  background: var(--card-background);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+}
+
+.country-info .country-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.country-info .country-flag {
+  width: 50px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.country-info .country-name {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.basic-stats {
+  font-size: 0.8rem;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+  border-bottom: none;
+}
+
+/* 詳細國家資訊樣式 */
+.country-detail-info {
+  background: var(--card-background);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  margin: 2rem 0;
+}
+
+/* 底部區域樣式 */
+.bottom-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius);
 } 

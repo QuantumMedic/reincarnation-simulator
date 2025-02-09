@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>轉世投胎模擬器</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <h1 class="animate__animated animate__fadeIn">轉世投胎模擬器</h1>
+      <p class="subtitle">探索你的下一世命運</p>
+      <div class="stats-banner">
+        <div class="stat-counter">
+          <span id="totalReincarnations">0</span>
+          <label>總投胎次數</label>
+        </div>
+        <div class="stat-counter">
+          <span id="uniqueCountries">0</span>
+          <label>造訪國家數</label>
+        </div>
+        <div class="stat-counter">
+          <span id="taiwanCount">0</span>
+          <label>台灣次數</label>
+        </div>
+        <div class="stat-counter">
+          <span id="chinaCount">0</span>
+          <label>中國次數</label>
+        </div>
+        <button id="resetStatsButton" class="reset-btn">
+          <span class="icon">��</span>重置統計
+        </button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="control-panel">
+        <button id="reincarnateButton" class="reincarnate-btn animate__animated animate__pulse animate__infinite">
+          開始投胎
+        </button>
+        
+        <div class="secondary-controls">
+          <button id="historyButton" class="history-btn">
+            <span class="icon">📜</span>歷史記錄
+          </button>
+          <div class="share-group">
+            <button id="copyButton" class="share-btn">
+              <span class="icon">📋</span>複製連結
+            </button>
+            <button id="fbShareButton" class="share-btn fb">
+              <span class="icon">📱</span>分享到 Facebook
+            </button>
+            <button id="lineShareButton" class="share-btn line">
+              <span class="icon">💬</span>分享到 LINE
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-container">
+        <p id="result" class="result">準備好了！請點擊「開始投胎」按鈕</p>
+      </div>
+
+      <div class="info-container">
+        <div id="map" class="map-container"></div>
+        <div id="countryInfo" class="country-info"></div>
+      </div>
+
+      <div class="indicators-section">
+        <h2>指標說明</h2>
+        <div class="indicators-grid">
+          <!-- HDI 說明 -->
+          <div class="indicator-card">
+            <h3>人類發展指數 (HDI)</h3>
+            <p>綜合衡量國家在三個維度的發展成就：</p>
+            <ul>
+              <li>健康：預期壽命</li>
+              <li>教育：受教育年限</li>
+              <li>生活水準：人均國民收入</li>
+            </ul>
+            <div class="level-indicators">
+              <span class="level very-high">極高 ≥0.9</span>
+              <span class="level high">高 0.8-0.899</span>
+              <span class="level medium">中 0.7-0.799</span>
+              <span class="level low">低 <0.7</span>
+            </div>
+          </div>
+          
+          <!-- 其他指標說明... -->
+        </div>
+        
+        <!-- 全球平均值 -->
+        <div class="average-stats">
+          <h4>全球平均值</h4>
+          <ul>
+            <li><span>HDI指數</span><span>0.732</span></li>
+            <li><span>預期壽命</span><span>72.8歲</span></li>
+            <li><span>人均國民收入</span><span>$16,752</span></li>
+            <li><span>性別不平等指數</span><span>0.465</span></li>
+          </ul>
+        </div>
+        
+        <p class="data-source">資料來源：UN Human Development Report 2023-2024</p>
+      </div>
+    </main>
+
+    <div id="historyModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>轉世歷史記錄</h2>
+          <button class="close-btn">&times;</button>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </div>
+    </div>
+
+    <button id="countriesListBtn" class="countries-list-btn">
+      <span class="icon">🌍</span>查看所有國家資料
+    </button>
+    
+    <!-- 國家列表模態框 -->
+    <div id="countriesModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>全球國家資料一覽</h2>
+          <button class="close-btn">&times;</button>
+        </div>
+        <div class="search-bar">
+          <input type="text" id="countrySearch" placeholder="搜尋國家...">
+        </div>
+        <table class="countries-table">
+          <thead>
+            <tr>
+              <th>國家/地區</th>
+              <th class="sortable" data-sort="population">人口 ↕</th>
+              <th class="sortable" data-sort="hdi-rank">HDI排名 ↕</th>
+              <th class="sortable" data-sort="hdi">HDI指數 ↕</th>
+              <th class="sortable" data-sort="life">平均壽命 ↕</th>
+            </tr>
+          </thead>
+          <tbody id="countriesTableBody"></tbody>
+        </table>
+        <div class="indicators-info">
+          <h3>指標說明</h3>
+          <div class="indicator-grid">
+            <div class="indicator-item">
+              <h4>人類發展指數 (HDI)</h4>
+              <p>綜合衡量國家在健康、教育和生活水準三個維度的發展成就。指數從0到1，越接近1表示發展水平越高。由聯合國開發計劃署（UNDP）每年發布。</p>
+              <ul>
+                <li><span class="very-high">■</span> 極高：≥0.9 (如：挪威、瑞士)</li>
+                <li><span class="high">■</span> 高：0.8-0.899 (如：馬來西亞、泰國)</li>
+                <li><span class="medium">■</span> 中：0.7-0.799 (如：越南、菲律賓)</li>
+                <li><span class="low">■</span> 低：<0.7 (如：緬甸、柬埔寨)</li>
+              </ul>
+            </div>
+            <div class="indicator-item">
+              <h4>人均國民收入 (GNI)</h4>
+              <p>反映一個國家居民的平均收入水平，以購買力平價(PPP)計算，單位為美元。這個指標考慮了各國物價水平的差異，更準確地反映實際生活水準。</p>
+              <ul>
+                <li>極高：≥40,000美元</li>
+                <li>高：20,000-39,999美元</li>
+                <li>中：5,000-19,999美元</li>
+                <li>低：<5,000美元</li>
+              </ul>
+            </div>
+            <div class="indicator-item">
+              <h4>預期壽命</h4>
+              <p>出生時的預期壽命，反映該國居民的健康水平、醫療條件、生活環境等綜合因素。</p>
+              <ul>
+                <li>極高：≥80歲 (如：日本、香港)</li>
+                <li>高：75-79歲</li>
+                <li>中：70-74歲</li>
+                <li>低：<70歲</li>
+              </ul>
+            </div>
+            <div class="indicator-item">
+              <h4>教育指標</h4>
+              <p>由兩個指標組成：</p>
+              <ul>
+                <li>預期受教育年限：入學兒童在其一生中預期接受的教育年數</li>
+                <li>平均受教育年限：25歲及以上人口實際接受教育的平均年數</li>
+              </ul>
+              <p>這兩個指標共同反映一個國家的教育發展水平。</p>
+            </div>
+          </div>
+          <div class="data-notes">
+            <h4>資料說明</h4>
+            <ul>
+              <li>所有數據均來自：
+                <ul>
+                  <li><a href="https://hdr.undp.org/data-center" target="_blank">聯合國人類發展報告（2023-2024）</a></li>
+                  <li><a href="https://www.worldbank.org/en/home" target="_blank">世界銀行開放數據</a></li>
+                  <li><a href="https://stats.oecd.org/" target="_blank">OECD 統計數據庫</a></li>
+                  <li><a href="https://www.imf.org/en/Data" target="_blank">國際貨幣基金組織數據庫</a></li>
+                </ul>
+              </li>
+              <li>HDI 排名每年會有所變動，請以最新官方數據為準</li>
+            </ul>
+          </div>
+          <p class="data-source">數據來源：聯合國開發計劃署《人類發展報告2023-2024》</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="data/hdi-data.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html> 

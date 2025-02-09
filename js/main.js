@@ -10,7 +10,12 @@ class ReincarnationGame {
     this.taiwanCount = parseInt(localStorage.getItem('taiwanCount')) || 0;
     this.populationRanges = [];
     
-    this.initialize();
+    // 檢查 DOM 是否已經載入
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => this.initialize());
+    } else {
+      this.initialize();
+    }
   }
 
   async initialize() {
@@ -20,10 +25,8 @@ class ReincarnationGame {
       this.initializePopulationRanges();
       this.setupEventListeners();
       this.updateStats();
-      document.getElementById('result').innerText = "準備好了！請點擊「開始投胎」按鈕";
     } catch (error) {
       console.error("初始化失敗：", error);
-      document.getElementById('result').innerText = "載入失敗，請重新整理頁面";
     }
   }
 
@@ -102,48 +105,61 @@ class ReincarnationGame {
     };
 
     const populationPercent = ((country.population / this.totalPopulation) * 100).toFixed(4);
-    const countryInfo = document.getElementById('countryInfo');
-    countryInfo.innerHTML = `
-      <div class="country-header">
-        <img src="${country.flag}" alt="${country.name}國旗" class="country-flag">
-        <h2>${country.name}</h2>
+    
+    // 更新簡化版國家資訊
+    const countryInfoSimple = document.getElementById('countryInfo');
+    const flagImg = countryInfoSimple.querySelector('.country-flag');
+    const countryName = countryInfoSimple.querySelector('.country-name');
+    
+    flagImg.src = country.flag;
+    flagImg.alt = `${country.name}國旗`;
+    countryName.textContent = country.name;
+    
+    // 更新基本統計數據
+    document.getElementById('birthProb').textContent = `${populationPercent}%`;
+    document.getElementById('hdiValue').textContent = country.hdi ? country.hdi.toFixed(3) : '無資料';
+    document.getElementById('hdiRank').textContent = country.hdiRank || '無資料';
+    document.getElementById('gniValue').textContent = country.gni ? `$${country.gni.toLocaleString()}` : '無資料';
+
+    // 更新詳細資訊
+    const detailInfo = document.getElementById('countryDetailInfo');
+    const detailedStats = detailInfo.querySelector('.detailed-stats');
+    
+    detailedStats.innerHTML = `
+      <div class="stat-item">
+        <div class="stat-label">投胎機率</div>
+        <div class="stat-value">${populationPercent}%</div>
       </div>
-      <div class="country-stats">
-        <div class="stat-item">
-          <div class="stat-label">投胎機率</div>
-          <div class="stat-value">${populationPercent}%</div>
+      <div class="stat-item">
+        <div class="stat-label">人口數量</div>
+        <div class="stat-value">${country.population.toLocaleString()} 人</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">HDI 排名</div>
+        <div class="stat-value">${country.hdiRank || '無資料'}</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">HDI 指數</div>
+        <div class="stat-value ${getColorClass(country.hdi, averages.hdi)}">
+          ${country.hdi ? country.hdi.toFixed(3) : '無資料'}
         </div>
-        <div class="stat-item">
-          <div class="stat-label">人口數量</div>
-          <div class="stat-value">${country.population.toLocaleString()} 人</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">預期壽命</div>
+        <div class="stat-value ${getColorClass(country.lifeExpectancy, averages.life)}">
+          ${country.lifeExpectancy ? `${country.lifeExpectancy}歲` : '無資料'}
         </div>
-        <div class="stat-item">
-          <div class="stat-label">HDI 排名</div>
-          <div class="stat-value">${country.hdiRank || '無資料'}</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">人均國民收入</div>
+        <div class="stat-value ${getColorClass(country.gni, averages.gni)}">
+          ${country.gni ? `$${country.gni.toLocaleString()}` : '無資料'}
         </div>
-        <div class="stat-item">
-          <div class="stat-label">HDI 指數</div>
-          <div class="stat-value ${getColorClass(country.hdi, averages.hdi)}">
-            ${country.hdi ? country.hdi.toFixed(3) : '無資料'}
-          </div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-label">預期壽命</div>
-          <div class="stat-value ${getColorClass(country.lifeExpectancy, averages.life)}">
-            ${country.lifeExpectancy ? `${country.lifeExpectancy}歲` : '無資料'}
-          </div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-label">人均國民收入</div>
-          <div class="stat-value ${getColorClass(country.gni, averages.gni)}">
-            ${country.gni ? `$${country.gni.toLocaleString()}` : '無資料'}
-          </div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-label">性別不平等指數</div>
-          <div class="stat-value ${getColorClass(country.gii, averages.gii, true)}">
-            ${country.gii ? country.gii.toFixed(3) : '無資料'}
-          </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">性別不平等指數</div>
+        <div class="stat-value ${getColorClass(country.gii, averages.gii, true)}">
+          ${country.gii ? country.gii.toFixed(3) : '無資料'}
         </div>
       </div>
     `;
@@ -222,28 +238,23 @@ class ReincarnationGame {
     if (this.isAnimating) return;
     this.isAnimating = true;
 
-    const result = document.getElementById('result');
     const countryInfo = document.getElementById('countryInfo');
 
     // 檢查是否有國家資料
     if (!this.countries || this.countries.length === 0) {
-      result.innerText = "載入失敗，請重新整理頁面";
       this.isAnimating = false;
       return;
     }
 
-    // 直接選擇最終國家（依據人口比例）
+    // 選擇國家並更新顯示
     const finalCountry = this.getRandomCountry();
-    
-    // 更新顯示
     this.updateCountryInfo(finalCountry);
+    
     if (this.worldMap) {
       this.worldMap.updateMarker(finalCountry);
     }
+    
     this.saveToHistory(finalCountry);
-
-    // 顯示結果
-    result.innerText = `恭喜！你將投胎到：${finalCountry.name}`;
     countryInfo.style.display = 'block';
     
     this.isAnimating = false;
@@ -259,19 +270,19 @@ class ReincarnationGame {
     // 開始投胎按鈕
     const reincarnateButton = document.getElementById('reincarnateButton');
     if (reincarnateButton) {
-      reincarnateButton.addEventListener('click', () => this.startReincarnation());
+      reincarnateButton.addEventListener('click', this.startReincarnation.bind(this));
     }
 
     // 歷史記錄按鈕
     const historyButton = document.getElementById('historyButton');
     if (historyButton) {
-      historyButton.addEventListener('click', () => this.showHistory());
+      historyButton.addEventListener('click', this.showHistory.bind(this));
     }
 
     // 查看所有國家按鈕
     const countriesListBtn = document.getElementById('countriesListBtn');
     if (countriesListBtn) {
-      countriesListBtn.addEventListener('click', () => this.showCountriesList());
+      countriesListBtn.addEventListener('click', this.showCountriesList.bind(this));
     }
 
     // 關閉按鈕
@@ -295,31 +306,49 @@ class ReincarnationGame {
       });
     });
 
-    // Facebook 分享
-    document.getElementById('fbShareButton')?.addEventListener('click', () => {
-      const shareUrl = encodeURIComponent(window.location.href);
-      const shareTitle = encodeURIComponent('轉世投胎模擬器');
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${shareTitle}`, 
-        'facebook-share-dialog', 
-        'width=800,height=600'
-      );
-    });
+    // 分享按鈕
+    const fbShareButton = document.getElementById('fbShareButton');
+    const lineShareButton = document.getElementById('lineShareButton');
+    const copyButton = document.getElementById('copyButton');
 
-    // LINE 分享
-    document.getElementById('lineShareButton')?.addEventListener('click', () => {
-      const shareUrl = encodeURIComponent(window.location.href);
-      window.open(`https://social-plugins.line.me/lineit/share?url=${shareUrl}`,
-        'line-share-dialog',
-        'width=800,height=600'
-      );
-    });
+    if (fbShareButton) {
+      fbShareButton.addEventListener('click', () => {
+        const shareUrl = encodeURIComponent(window.location.href);
+        const shareTitle = encodeURIComponent('轉世投胎模擬器');
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${shareTitle}`, 
+          'facebook-share-dialog', 
+          'width=800,height=600'
+        );
+      });
+    }
 
-    // 複製連結
-    document.getElementById('copyButton')?.addEventListener('click', () => {
-      navigator.clipboard.writeText(window.location.href)
-        .then(() => alert('網址已複製到剪貼板！'))
-        .catch(err => console.error('複製失敗:', err));
-    });
+    if (lineShareButton) {
+      lineShareButton.addEventListener('click', () => {
+        const shareUrl = encodeURIComponent(window.location.href);
+        window.open(`https://social-plugins.line.me/lineit/share?url=${shareUrl}`,
+          'line-share-dialog',
+          'width=800,height=600'
+        );
+      });
+    }
+
+    if (copyButton) {
+      copyButton.addEventListener('click', () => {
+        navigator.clipboard.writeText(window.location.href)
+          .then(() => alert('網址已複製到剪貼板！'))
+          .catch(err => console.error('複製失敗:', err));
+      });
+    }
+
+    // 重置按鈕
+    const resetStatsButton = document.getElementById('resetStatsButton');
+    if (resetStatsButton) {
+      resetStatsButton.addEventListener('click', () => {
+        if (confirm('確定要重置所有統計數據嗎？這將清除所有歷史記錄。')) {
+          this.resetAllStats();
+        }
+      });
+    }
 
     // 添加搜尋功能
     document.getElementById('countrySearch').addEventListener('input', (e) => {
@@ -349,37 +378,23 @@ class ReincarnationGame {
         this.sortCountries(sortType, !isAsc);
       });
     });
-
-    // 添加重置按鈕事件
-    const resetStatsButton = document.getElementById('resetStatsButton');
-    if (resetStatsButton) {
-      resetStatsButton.addEventListener('click', () => {
-        if (confirm('確定要重置所有統計數據嗎？這將清除所有歷史記錄。')) {
-          this.resetAllStats();
-        }
-      });
-    }
   }
 
   resetAllStats() {
-    // 重置所有統計數據
     this.history = [];
     this.totalReincarnations = 0;
     this.visitedCountries = new Set();
     this.taiwanCount = 0;
 
-    // 清除 localStorage
     localStorage.removeItem('reincarnationHistory');
     localStorage.removeItem('totalReincarnations');
     localStorage.removeItem('visitedCountries');
     localStorage.removeItem('taiwanCount');
 
-    // 更新顯示
     this.updateStats();
     
-    // 清空結果顯示
-    document.getElementById('result').innerText = "準備好了！請點擊「開始投胎」按鈕";
-    document.getElementById('countryInfo').style.display = 'none';
+    const countryInfo = document.getElementById('countryInfo');
+    countryInfo.style.display = 'none';
   }
 
   // 添加顯示國家列表的方法
@@ -496,5 +511,7 @@ class ReincarnationGame {
   }
 }
 
-// 創建遊戲實例
-const game = new ReincarnationGame(); 
+// 等待 DOM 完全載入後再創建遊戲實例
+window.addEventListener('load', () => {
+  window.game = new ReincarnationGame();
+}); 

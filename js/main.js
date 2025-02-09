@@ -8,7 +8,6 @@ class ReincarnationGame {
     this.totalReincarnations = parseInt(localStorage.getItem('totalReincarnations')) || 0;
     this.visitedCountries = new Set(JSON.parse(localStorage.getItem('visitedCountries')) || []);
     this.taiwanCount = parseInt(localStorage.getItem('taiwanCount')) || 0;
-    this.chinaCount = parseInt(localStorage.getItem('chinaCount')) || 0;
     this.populationRanges = [];
     
     this.initialize();
@@ -160,13 +159,10 @@ class ReincarnationGame {
     this.totalReincarnations++;
     this.visitedCountries.add(country.name);
     
-    // 更新台灣和中國的計數（修正判斷條件）
+    // 更新台灣的計數
     if (country.name.includes('臺灣') || country.name.includes('台灣')) {
       this.taiwanCount++;
       localStorage.setItem('taiwanCount', this.taiwanCount);
-    } else if (country.name.includes('中國')) {
-      this.chinaCount++;
-      localStorage.setItem('chinaCount', this.chinaCount);
     }
     
     localStorage.setItem('totalReincarnations', this.totalReincarnations);
@@ -257,7 +253,6 @@ class ReincarnationGame {
     document.getElementById('totalReincarnations').textContent = this.totalReincarnations;
     document.getElementById('uniqueCountries').textContent = this.visitedCountries.size;
     document.getElementById('taiwanCount').textContent = this.taiwanCount;
-    document.getElementById('chinaCount').textContent = this.chinaCount;
   }
 
   setupEventListeners() {
@@ -372,14 +367,12 @@ class ReincarnationGame {
     this.totalReincarnations = 0;
     this.visitedCountries = new Set();
     this.taiwanCount = 0;
-    this.chinaCount = 0;
 
     // 清除 localStorage
     localStorage.removeItem('reincarnationHistory');
     localStorage.removeItem('totalReincarnations');
     localStorage.removeItem('visitedCountries');
     localStorage.removeItem('taiwanCount');
-    localStorage.removeItem('chinaCount');
 
     // 更新顯示
     this.updateStats();

@@ -698,7 +698,23 @@ body {
   font-size: 16px;
 }
 
-/* 修改手機版媒體查詢部分 */
+/* 新增分享區塊的樣式 */
+.share-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius);
+  text-align: center;
+}
+
+.share-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* 修改手機版媒體查詢 */
 @media only screen and (max-width: 768px) {
   /* 調整統計橫條，讓它保持一列 */
   .stats-banner {
@@ -749,5 +765,16 @@ body {
 
   .control-panel {
     padding: 0 10px;
+  }
+
+  /* 調整分享按鈕在手機版的樣式 */
+  .share-section {
+    margin-top: 1rem;
+    padding: 0.5rem;
+  }
+  
+  .share-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 } 

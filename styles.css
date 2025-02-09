@@ -22,6 +22,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;  /* 防止水平滾動 */
 }
 
 .app-header {
@@ -48,8 +49,9 @@ body {
 .main-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   flex-grow: 1;
+  width: calc(100% - 2rem);  /* 考慮 padding */
 }
 
 .control-panel {
@@ -783,14 +785,13 @@ body {
   }
 
   .main-content {
-    padding: 1rem;
-    width: 100%;
-    max-width: 100%;
+    padding: 0.5rem;
+    width: calc(100% - 1rem);
     margin: 0 auto;
   }
 
   .app-header {
-    width: 100vw;
+    width: 100%;
     margin: 0;
     padding: 0.5rem 0;
   }
@@ -814,6 +815,19 @@ body {
   .share-btn {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
+  }
+
+  /* 確保所有內容區塊都對齊 */
+  .stats-banner,
+  .control-panel,
+  .info-container,
+  .country-detail-info,
+  .indicators-section,
+  .bottom-section {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
   }
 }
 
@@ -873,4 +887,17 @@ body {
   padding: 1rem;
   background: rgba(255, 255, 255, 0.1);
   border-radius: var(--border-radius);
+}
+
+/* 基本統計數據的顏色指示 */
+.stat-row .stat-value {
+  font-weight: 500;
+}
+
+.stat-row .stat-value.above-average {
+  color: #4cd137;  /* 高於平均值顯示綠色 */
+}
+
+.stat-row .stat-value.below-average {
+  color: #e74c3c;  /* 低於平均值顯示紅色 */
 } 

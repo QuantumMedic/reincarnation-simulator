@@ -696,4 +696,52 @@ body {
 
 .reset-btn .icon {
   font-size: 16px;
+}
+
+/* 在文件末尾添加以下媒體查詢，調整手機版樣式 */
+@media only screen and (max-width: 768px) {
+  /* 調整整體容器內邊距 */
+  .app-container {
+    padding: 10px;
+  }
+  
+  /* 調整標題字體和間距 */
+  .app-header h1 {
+    font-size: 2rem;
+  }
+  
+  /* 將統計板塊由橫向排列變成縱向排列，並置中 */
+  .stats-banner {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* 每個統計項目設定 100% 寬度及間隔 */
+  .stat-counter {
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  /* 控制區塊左右內邊距縮小 */
+  .control-panel {
+    padding: 0 10px;
+  }
+  
+  /* 調整主要按鈕大小 */
+  .reincarnate-btn {
+    font-size: 1.2rem;
+    padding: 0.5rem 1.5rem;
+  }
+  
+  /* 給模態框內容增加響應式寬度 */
+  .modal-content {
+    width: 90%;
+    margin: 0 auto;
+  }
+  
+  /* 調整國家列表的表格字體，以適合小螢幕 */
+  .countries-table {
+    font-size: 0.9rem;
+  }
 } 

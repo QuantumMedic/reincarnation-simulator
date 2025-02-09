@@ -698,50 +698,56 @@ body {
   font-size: 16px;
 }
 
-/* 在文件末尾添加以下媒體查詢，調整手機版樣式 */
+/* 修改手機版媒體查詢部分 */
 @media only screen and (max-width: 768px) {
-  /* 調整整體容器內邊距 */
+  /* 調整統計橫條，讓它保持一列 */
+  .stats-banner {
+    flex-wrap: nowrap;  /* 防止換行 */
+    gap: 0.5rem;  /* 減少間距 */
+    padding: 0.5rem;  /* 減少內邊距 */
+    overflow-x: auto;  /* 如果超出可以滑動 */
+    justify-content: flex-start;  /* 從左開始排列 */
+    -webkit-overflow-scrolling: touch;  /* 讓 iOS 滑動更順暢 */
+  }
+
+  .stat-counter {
+    flex-shrink: 0;  /* 防止壓縮 */
+    padding: 0 0.5rem;  /* 加入左右間距 */
+  }
+
+  .stat-counter span {
+    font-size: 1.2rem;  /* 稍微縮小數字 */
+    margin-bottom: 0.2rem;
+  }
+
+  .stat-counter label {
+    font-size: 0.8rem;  /* 縮小標籤文字 */
+  }
+
+  /* 調整資訊顯示順序 */
+  .info-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .country-info {
+    order: -1;  /* 讓國家資訊顯示在地圖之前 */
+  }
+
+  .map-container {
+    height: 300px;  /* 稍微降低地圖高度 */
+  }
+
+  /* 其他手機版調整保持不變 */
   .app-container {
     padding: 10px;
   }
-  
-  /* 調整標題字體和間距 */
+
   .app-header h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
-  
-  /* 保持統計板塊橫列排列 */
-  .stats-banner {
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    overflow-x: auto;  /* 若內容超出螢幕寬度，自動出現水平捲軸 */
-  }
-  
-  /* 保持統計項目原有設定 */
-  .stat-counter {
-    text-align: center;
-  }
-  
-  /* 控制區塊左右內邊距縮小 */
+
   .control-panel {
     padding: 0 10px;
-  }
-  
-  /* 調整主要按鈕大小 */
-  .reincarnate-btn {
-    font-size: 1.2rem;
-    padding: 0.5rem 1.5rem;
-  }
-  
-  /* 給模態框內容增加響應式寬度 */
-  .modal-content {
-    width: 90%;
-    margin: 0 auto;
-  }
-  
-  /* 調整國家列表的表格字體，以適合小螢幕 */
-  .countries-table {
-    font-size: 0.9rem;
   }
 } 

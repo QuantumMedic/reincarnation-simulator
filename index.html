@@ -14,6 +14,9 @@
     <header class="app-header">
       <h1 class="animate__animated animate__fadeIn">轉世投胎模擬器</h1>
       <p class="subtitle">探索你的下一世命運</p>
+    </header>
+
+    <main class="main-content">
       <div class="stats-banner">
         <div class="stat-counter">
           <span id="totalReincarnations">0</span>
@@ -31,30 +34,14 @@
           <span class="icon">🔄</span>重置統計
         </button>
       </div>
-    </header>
 
-    <main class="main-content">
       <div class="control-panel">
         <button id="reincarnateButton" class="reincarnate-btn animate__animated animate__pulse animate__infinite">
           開始投胎
         </button>
-        
-        <div class="secondary-controls">
-          <button id="historyButton" class="history-btn">
-            <span class="icon">📜</span>歷史記錄
-          </button>
-          <div class="share-group">
-            <button id="copyButton" class="share-btn">
-              <span class="icon">📋</span>複製連結
-            </button>
-            <button id="fbShareButton" class="share-btn fb">
-              <span class="icon">📱</span>分享到 Facebook
-            </button>
-            <button id="lineShareButton" class="share-btn line">
-              <span class="icon">💬</span>分享到 LINE
-            </button>
-          </div>
-        </div>
+        <button id="historyButton" class="history-btn">
+          <span class="icon">��</span>歷史記錄
+        </button>
       </div>
 
       <div class="result-container">
@@ -62,8 +49,8 @@
       </div>
 
       <div class="info-container">
-        <div id="map" class="map-container"></div>
         <div id="countryInfo" class="country-info"></div>
+        <div id="map" class="map-container"></div>
       </div>
 
       <div class="indicators-section">
@@ -101,6 +88,21 @@
         </div>
         
         <p class="data-source">資料來源：UN Human Development Report 2023-2024</p>
+      </div>
+
+      <!-- 分享按鈕移到最下面 -->
+      <div class="share-section">
+        <div class="share-group">
+          <button id="copyButton" class="share-btn">
+            <span class="icon">📋</span>複製連結
+          </button>
+          <button id="fbShareButton" class="share-btn fb">
+            <span class="icon">📱</span>分享到 Facebook
+          </button>
+          <button id="lineShareButton" class="share-btn line">
+            <span class="icon">💬</span>分享到 LINE
+          </button>
+        </div>
       </div>
     </main>
 

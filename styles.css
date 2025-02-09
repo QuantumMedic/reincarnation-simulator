@@ -710,16 +710,16 @@ body {
     font-size: 2rem;
   }
   
-  /* 將統計板塊由橫向排列變成縱向排列，並置中 */
+  /* 保持統計板塊橫列排列 */
   .stats-banner {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
+    overflow-x: auto;  /* 若內容超出螢幕寬度，自動出現水平捲軸 */
   }
   
-  /* 每個統計項目設定 100% 寬度及間隔 */
+  /* 保持統計項目原有設定 */
   .stat-counter {
-    width: 100%;
-    margin-bottom: 10px;
     text-align: center;
   }
   
